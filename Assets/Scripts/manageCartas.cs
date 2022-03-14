@@ -1,35 +1,69 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Script gerenciador das cartas, responsável por gera-las e garantir o funcionamento do game.
 /// </summary>
-public class manageCartas : MonoBehaviour
+public class ManageCartas : MonoBehaviour
 {
-
     public GameObject carta; //Carta a ser descartada;
+    private bool primeiraCartaSelecionada, segundaCartaSelecionada; //Indicadores para cada carta escolhida em uma linha.
+    private GameObject carta1, carta2; //Armazena cartas reveladas;
+    private string linhaCarta1, linhaCarta2; //Armazena a linha da primeira carta selecionada e da segunda carta selecionada.
+
+    bool timerAcionado, timerPausado;
+    float timer;
+
+    int numTentativas = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         MostraCartas(); //Carrega as cartas ao inicio do jogo
+        UpdateTentativas(); //Atualiza numero de tentativas
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(timerAcionado)
+        {
+            timer += Time.deltaTime;
+            print(timer);
+            if(timer>1)
+            {
+                timerPausado = true;
+                timerAcionado = false;
+                if(carta1.tag == carta2.tag)
+                {
+                    Destroy(carta1);
+                    Destroy(carta2);
+                } else
+                {
+                    carta1.GetComponent<Tile>().EscondeCarta();
+                    carta2.GetComponent<Tile>().EscondeCarta();
+                }
+                primeiraCartaSelecionada = false;
+                segundaCartaSelecionada = false;
+                carta1 = null;
+                carta2 = null;
+                linhaCarta1 = "";
+                linhaCarta2 = "";
+                timer = 0;
+            }
+        }
     }
 
     void MostraCartas()
     {
         //Instantiate(carta, new Vector3(0,0,0),Quaternion.identity);
         //AdicionaCarta();
-        int[] lista = criaArrayEmbaralhado(); //Pega array embaralhado de 0 a 12 para a primeira linha
-        int[] lista2 = criaArrayEmbaralhado(); //Pega array embaralhado de 0 a 12 para a segunda linha
+        int[] lista = CriaArrayEmbaralhado(); //Pega array embaralhado de 0 a 12 para a primeira linha
+        int[] lista2 = CriaArrayEmbaralhado(); //Pega array embaralhado de 0 a 12 para a segunda linha
         
-        for (int i=0;i<12;i++)
+        for (int i=0;i<13;i++)
         {
             AdicionaCarta(0, i, lista[i], "clubs"); //Gera baralho da primeira linha com nipe de clubs
             AdicionaCarta(1, i, lista2[i], "hearts"); //Gera baralho da primeira linha com nipe de hearts
@@ -106,11 +140,11 @@ public class manageCartas : MonoBehaviour
     }
 
     //Cria um array de 13 numeros embaralhado para o baralho.
-    public int[] criaArrayEmbaralhado()
+    public int[] CriaArrayEmbaralhado()
     {
-        int[] array = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+        int[] array = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 }; // Array ordenado
         int temp;
-        for(int t=0;t<13;t++)
+        for(int t=0;t<13;t++) // Embaralha o array de forma aleatória.
         {
             temp = array[t];
             int r = Random.Range(t, 13);
@@ -118,5 +152,46 @@ public class manageCartas : MonoBehaviour
             array[r] = temp;
         }
         return array;
+    }
+
+    public void CartaSelecionada(GameObject carta)
+    {
+        if(!primeiraCartaSelecionada)
+        {
+            string linha = carta.name.Substring(0, 1); // Armazena a linha da carta selecionada.
+            linhaCarta1 = linha;
+            primeiraCartaSelecionada = true; // Indica que a carta foi selecionada
+            carta1 = carta; // define a carta1 como a carta clicada.
+            carta1.GetComponent<Tile>().RevelaCarta(); //Revela a carta clicada
+        } else if(primeiraCartaSelecionada && !segundaCartaSelecionada)
+        {
+            string linha2 = carta.name.Substring(0, 1); // Armazena a linha da carta selecionada.
+            if(linhaCarta1 != linha2) // Verifica se a segunda carta está no outro baralho.
+            {
+                linhaCarta2 = linha2;
+                segundaCartaSelecionada = true; // Indica que a carta foi selecionada
+                carta2 = carta; // define a carta1 como a carta clicada.
+                carta2.GetComponent<Tile>().RevelaCarta(); //Revela a carta clicada
+                VerificaCartas();
+            }
+        }
+    }
+
+    public void VerificaCartas() //Dispara o timer
+    {
+        DisparaTimer();
+        numTentativas++;
+        UpdateTentativas();
+    }
+
+    public void DisparaTimer()
+    {
+        timerPausado = false;
+        timerAcionado = true;
+    }
+
+    void UpdateTentativas()
+    {
+        GameObject.Find("numTentativas").GetComponent<Text>().text = "Tentativas: "+numTentativas;
     }
 }

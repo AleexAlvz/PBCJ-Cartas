@@ -30,10 +30,13 @@ public class Tile : MonoBehaviour
     public void OnMouseDown()
     {
         print("Você clicou em uma carta!");
+        /*
         if(cartaRevelada)
             EscondeCarta();
         else
             RevelaCarta();
+        */ //Aqui não se guardava a carta.
+        GameObject.Find("gameManager").GetComponent<ManageCartas>().CartaSelecionada(gameObject);
     }
 
     public void EscondeCarta() //Vira a carta, mostrando a parte de trás
