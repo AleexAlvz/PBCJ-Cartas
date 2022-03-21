@@ -8,7 +8,7 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
 
-    private bool cartaRevelada = false; //Indicador da carta virada ou não
+    //private bool cartaRevelada = false; // Indicador da carta virada ou não (não está sendo usado)
     public Sprite cartaOriginal; //Sprite da frente da carta
     public Sprite cartaBack; //Sprite do avesso da carta
 
@@ -42,13 +42,13 @@ public class Tile : MonoBehaviour
     public void EscondeCarta() //Vira a carta, mostrando a parte de trás
     {
         GetComponent<SpriteRenderer>().sprite = cartaBack; //configura o sprite do Tile
-        cartaRevelada = false;
+        //cartaRevelada = false; //indicador de cartaRevelada não está sendo usado
     }
 
     public void RevelaCarta() //Vira a carta, mostrando a parte da frente
     {
         GetComponent<SpriteRenderer>().sprite = cartaOriginal; //configura o sprite do Tile
-        cartaRevelada = true;
+        //cartaRevelada = true; //indicador de cartaRevelada não está sendo usado
     }
 
     public void SetCartaOriginal(Sprite sprite) //configura o sprite representate da carta instanciada

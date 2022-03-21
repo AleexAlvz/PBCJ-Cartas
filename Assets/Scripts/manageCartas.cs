@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Script gerenciador das cartas, responsável por gera-las e garantir o funcionamento do game.
@@ -9,30 +10,41 @@ using UnityEngine.UI;
 public class ManageCartas : MonoBehaviour
 {
     public GameObject carta; //Carta a ser descartada;
+    public int numMaximoTentativas;
     private bool primeiraCartaSelecionada, segundaCartaSelecionada; //Indicadores para cada carta escolhida em uma linha.
     private GameObject carta1, carta2; //Armazena cartas reveladas;
     private string linhaCarta1, linhaCarta2; //Armazena a linha da primeira carta selecionada e da segunda carta selecionada.
 
-    bool timerAcionado, timerPausado;
-    float timer;
+    bool timerAcionado, timerPausado; //Boolean para o timer
+    float timer; //Variavel que representa o timer quando duas cartas são escolhidas.
 
-    int numTentativas = 0;
+    int numTentativas = 0; //Tentativas de escolher duas cartas.
+    int numAcertos = 0; // Quantidade de vezes que acertou as cartas com mesmo número.
+    AudioSource somAcerto; //Som de acerto.
+
+    int ultimoRecorde = 0; //Variavel de recorde de menos tentativas no jogo.
 
     // Start is called before the first frame update
     void Start()
     {
         MostraCartas(); //Carrega as cartas ao inicio do jogo
         UpdateTentativas(); //Atualiza numero de tentativas
+        somAcerto = GetComponent<AudioSource>(); //Pega o AudioSource do GameObject gameManager
+        ultimoRecorde = PlayerPrefs.GetInt("Recorde", 0); // Seta o valor do ultimo recorde de menos tentativas no jogo.
+        PlayerPrefs.SetString("UltimoModoJogado", "ModoNormal"); //Salva o ultimo modo jogado no PlayerPrefs
+        GameObject.Find("ultimoRecorde").GetComponent<Text>().text = "Recorde: " + ultimoRecorde;
     }
 
     // Update is called once per frame
     void Update()
     {
+        VerificaVitoriaEDerrota();
+
         if(timerAcionado)
         {
             timer += Time.deltaTime;
             print(timer);
-            if(timer>1)
+            if(timer>1) //Caso tempo seja maior que 1, verifica se houve acerto ou erro no jogo
             {
                 timerPausado = true;
                 timerAcionado = false;
@@ -40,6 +52,8 @@ public class ManageCartas : MonoBehaviour
                 {
                     Destroy(carta1);
                     Destroy(carta2);
+                    numAcertos++;
+                    somAcerto.Play();
                 } else
                 {
                     carta1.GetComponent<Tile>().EscondeCarta();
@@ -192,6 +206,25 @@ public class ManageCartas : MonoBehaviour
 
     void UpdateTentativas()
     {
-        GameObject.Find("numTentativas").GetComponent<Text>().text = "Tentativas: "+numTentativas;
+        GameObject.Find("numTentativas").GetComponent<Text>().text = "Tentativas: "+numTentativas+" / "+numMaximoTentativas;
+    }
+
+    void VerificaVitoriaEDerrota()
+    {
+        if (numAcertos >= 13)
+        {
+            if (ultimoRecorde == 0) //Caso seja o primeiro placar, salva como recorde.
+            {
+                PlayerPrefs.SetInt("Recorde", numTentativas);
+            }
+            else if (numTentativas < ultimoRecorde) //Caso o numero de tentativas seja um novo recorde, salva esse novo recorde no PlayerPrefs.
+            {
+                PlayerPrefs.SetInt("Recorde", numTentativas);
+            }
+            SceneManager.LoadScene("Vitoria");
+        } else if (numTentativas>=numMaximoTentativas)
+        {
+            SceneManager.LoadScene("Derrota");
+        }
     }
 }
