@@ -10,7 +10,9 @@ public class Tile : MonoBehaviour
 
     //private bool cartaRevelada = false; // Indicador da carta virada ou não (não está sendo usado)
     public Sprite cartaOriginal; //Sprite da frente da carta
-    public Sprite cartaBack; //Sprite do avesso da carta
+    public Sprite cartaBackVermelha; //Sprite do avesso da carta vermelha
+    public Sprite cartaBackBlue; //Sprite do avesso da carta preta
+    private string backColor; //Cor que vai ficar no avesso da carta
 
     public Sprite novaCarta; //atualiza carta
 
@@ -39,9 +41,21 @@ public class Tile : MonoBehaviour
         GameObject.Find("gameManager").GetComponent<ManageCartas>().CartaSelecionada(gameObject);
     }
 
+    public void SetBackColor(string backColorString)
+    {
+        backColor = backColorString;
+    }
+
     public void EscondeCarta() //Vira a carta, mostrando a parte de trás
     {
-        GetComponent<SpriteRenderer>().sprite = cartaBack; //configura o sprite do Tile
+        if (backColor == "red")
+        {
+            GetComponent<SpriteRenderer>().sprite = cartaBackVermelha; //configura o sprite do Tile para back vermelho
+        } else if (backColor == "blue")
+        {
+            GetComponent<SpriteRenderer>().sprite = cartaBackBlue; //configura o sprite do Tile para back preto
+        }
+        
         //cartaRevelada = false; //indicador de cartaRevelada não está sendo usado
     }
 

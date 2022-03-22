@@ -379,6 +379,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   carta: {fileID: 8468592045540317722, guid: 895187b7b141c23449d62909b40964f1, type: 3}
   numMaximoTentativas: 60
+  linha1Nipe: clubs
+  linha2Nipe: hearts
+  linha1BackColor: red
+  linha2BackColor: red
 --- !u!4 &457075401
 Transform:
   m_ObjectHideFlags: 0

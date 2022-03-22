@@ -14,6 +14,8 @@ public class ManageCartas : MonoBehaviour
     private bool primeiraCartaSelecionada, segundaCartaSelecionada; //Indicadores para cada carta escolhida em uma linha.
     private GameObject carta1, carta2; //Armazena cartas reveladas;
     private string linhaCarta1, linhaCarta2; //Armazena a linha da primeira carta selecionada e da segunda carta selecionada.
+    public string linha1Nipe, linha2Nipe; //Escolhe o nipe das cartas pela linha
+    public string linha1BackColor, linha2BackColor; //Escolhe a backColor das cartas
 
     bool timerAcionado, timerPausado; //Boolean para o timer
     float timer; //Variavel que representa o timer quando duas cartas são escolhidas.
@@ -79,14 +81,13 @@ public class ManageCartas : MonoBehaviour
         
         for (int i=0;i<13;i++)
         {
-            AdicionaCarta(0, i, lista[i], "clubs"); //Gera baralho da primeira linha com nipe de clubs
-            AdicionaCarta(1, i, lista2[i], "hearts"); //Gera baralho da primeira linha com nipe de hearts
-
+            AdicionaCarta(0, i, lista[i], linha1Nipe, linha1BackColor); //Gera baralho da primeira linha com nipe de clubs
+            AdicionaCarta(1, i, lista2[i], linha2Nipe, linha2BackColor); //Gera baralho da primeira linha com nipe de hearts
         }
     }
 
     //Método responsável por instanciar a carta na posição correta.
-    void AdicionaCarta(int linha, int rank, int valor, string nipe)
+    void AdicionaCarta(int linha, int rank, int valor, string nipe, string backColor)
     {
         GameObject centroDaTela = GameObject.Find("centroDaTela");
         float escalaCartaOriginal = carta.transform.localScale.x;
@@ -147,10 +148,12 @@ public class ManageCartas : MonoBehaviour
         }
 
         nomeCarta = numeroCarta + "_of_"+nipe; // Nome da carta de acordo com o seu numero e o nipe.
-        Sprite s1 = (Sprite)Resources.Load<Sprite>("Cartas/"+nomeCarta); //Busca a carta pelo nome nos resources, no path "Cartas/"
+        Sprite s1 = (Sprite)Resources.Load<Sprite>("Images/Cartas/"+nomeCarta); //Busca a carta pelo nome nos resources, no path "Cartas/"
         print("S1: " + s1);
         //GameObject.Find(""+valor).GetComponent<Tile>().SetCartaOriginal(s1);
-        GameObject.Find("" +linha+"_"+valor).GetComponent<Tile>().SetCartaOriginal(s1);
+        Tile tile = GameObject.Find("" + linha + "_" + valor).GetComponent<Tile>(); //Encontra tile com nome especifico
+        tile.SetCartaOriginal(s1); //Configura a imagem da carta
+        tile.SetBackColor(backColor); //Configura backColor da carta
     }
 
     //Cria um array de 13 numeros embaralhado para o baralho.

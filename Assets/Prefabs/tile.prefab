@@ -97,7 +97,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cartaOriginal: {fileID: 21300000, guid: b795e5334bb53be46824c73bfecd1e26, type: 3}
-  cartaBack: {fileID: 21300000, guid: 92d5e1ed0061558408da2b039115d279, type: 3}
+  cartaBackVermelha: {fileID: 21300000, guid: 92d5e1ed0061558408da2b039115d279, type: 3}
+  cartaBackBlue: {fileID: 21300000, guid: f965827de146d0944bdbeaf415b6fbc7, type: 3}
   novaCarta: {fileID: 0}
 --- !u!61 &8468592045540317726
 BoxCollider2D:
