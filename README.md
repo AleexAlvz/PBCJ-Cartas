@@ -15,4 +15,4 @@ Tela de derrota
 
 Tela de vitória
 
-![TelaVitoria](https://user-images.githubusercontent.com/61116687/159470426-08305eb6-b2f7-41ce-8d51-6d593af95c34.png)
+![TelaVitoria](https://user-images.githubusercontent.com/61116687/159470664-06e3819f-cda9-41cd-b149-195af988ff7b.png)
