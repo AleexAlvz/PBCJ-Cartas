@@ -11,35 +11,40 @@ public class ManageButtons : MonoBehaviour
     //Carrega o modo de jogo normal, feito em aula
     public void IniciaModoNormalDeJogo()
     {
-        SceneManager.LoadScene(GameStrings.modoNormal);
+        SceneManager.LoadScene(GameStrings.modoNormal); //Carrega a cena
         PlayerPrefs.SetString( GameStrings.ultimoModojogado , GameStrings.modoNormal); //Salva o ultimo modo jogado no PlayerPrefs
     }
 
     //Carrega o primeiro modo customizado
     public void IniciaModoCustomizado1()
     {
-        SceneManager.LoadScene(GameStrings.modoC1);
+        SceneManager.LoadScene(GameStrings.modoC1); //Carrega a cena
         PlayerPrefs.SetString(GameStrings.ultimoModojogado, GameStrings.modoC1); //Salva o ultimo modo jogado no PlayerPrefs
     }
 
     //Carrega o segundo modo customizado
     public void IniciaModoCustomizado2()
     {
-        SceneManager.LoadScene(GameStrings.modoC2);
+        SceneManager.LoadScene(GameStrings.modoC2); //Carrega a cena
         PlayerPrefs.SetString(GameStrings.ultimoModojogado, GameStrings.modoC2); //Salva o ultimo modo jogado no PlayerPrefs
     }
 
     //Carrega tela de inicio
     public void VoltarParaInicio()
     {
-        SceneManager.LoadScene(GameStrings.telaInicial);
+        SceneManager.LoadScene(GameStrings.telaInicial); //Carrega a cena
+    }
+
+    public void IniciaCréditos()
+    {
+        SceneManager.LoadScene(GameStrings.telaCreditos); //Carrega a cena
     }
 
     // Busca nas Prefs o ultimo modo jogado e inicia ele, quando o botão replay é clicado.
     public void IniciaUltimoModoJogado()
     {
-        string ultimoModoJogado = PlayerPrefs.GetString(GameStrings.ultimoModojogado);
-        if (ultimoModoJogado == GameStrings.modoNormal) IniciaModoNormalDeJogo();
+        string ultimoModoJogado = PlayerPrefs.GetString(GameStrings.ultimoModojogado); //Busca string de ultimo modo jogado
+        if (ultimoModoJogado == GameStrings.modoNormal) IniciaModoNormalDeJogo(); //Verifica a qual modo essa string pertence e chama a tela.
         else if (ultimoModoJogado == GameStrings.modoC1) IniciaModoCustomizado1();
         else if (ultimoModoJogado == GameStrings.modoC2) IniciaModoCustomizado2();
     }

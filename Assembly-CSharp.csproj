@@ -8,8 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{5C91405A-6572-0A64-6CA4-381147DF35A4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -60,9 +59,13 @@
     <Compile Include="Assets\Scripts\ManageCartas.cs" />
     <Compile Include="Assets\Scripts\Tile.cs" />
     <Compile Include="Assets\Scripts\ManageButtons.cs" />
-    <Compile Include="Assets\Scripts\ManageModoC2.cs" />
     <Compile Include="Assets\Scripts\ManageModoC1.cs" />
+    <Compile Include="Assets\Scripts\ManageModoC2.cs" />
     <Compile Include="Assets\Scripts\GameStrings.cs" />
+    <Compile Include="Assets\Scripts\TelaCreditos.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Sprites\mikulka-smile\mikulka-smile-license.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

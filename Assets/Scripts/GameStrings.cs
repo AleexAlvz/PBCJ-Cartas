@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Armazena enums de várias strings, evitando o hard code durante a programação e diminuindo a refatoração futura.
+/// Armazena enums de várias strings, evitando o hard coded durante a programação e diminuindo a refatoração futura.
 /// </summary>
 public static class GameStrings
 {
@@ -12,6 +12,7 @@ public static class GameStrings
     public const string telaInicial = "TelaInicial"; //Armazena nome da tela inicial
     public const string telaVitoria = "Vitoria"; //Armazena nome da tela de vitória
     public const string telaDerrota = "Derrota"; //Armazena nome da tela de derrota
+    public const string telaCreditos = "Creditos"; //Nome da tela de créditos
 
     public const string modoNormal = "CartasModo1"; //String do modo normal
     public const string modoC1 = "CartasModo2"; //String do modo C1

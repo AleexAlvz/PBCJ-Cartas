@@ -379,10 +379,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   carta: {fileID: 8468592045540317722, guid: 895187b7b141c23449d62909b40964f1, type: 3}
   numMaximoTentativas: 60
-  linha1Nipe: clubs
-  linha2Nipe: clubs
-  linha1BackColor: red
-  linha2BackColor: red
 --- !u!4 &457075401
 Transform:
   m_ObjectHideFlags: 0
@@ -644,8 +640,8 @@ Canvas:
   m_GameObject: {fileID: 1658795904}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 519420031}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1

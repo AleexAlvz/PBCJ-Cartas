@@ -17,7 +17,7 @@ public class ManageModoC2 : MonoBehaviour
     public string linha1Nipe, linha2Nipe, linha3Nipe, linha4Nipe; //Escolhe o nipe das cartas pela linha
     public string linha1BackColor, linha2BackColor; //Escolhe a backColor das cartas
 
-    bool timerAcionado, timerPausado; //Boolean para o timer
+    bool timerAcionado; //Boolean para o timer
     float timer; //Variavel que representa o timer quando duas cartas são escolhidas.
 
     int numTentativas = 0; //Tentativas de escolher duas cartas.
@@ -33,8 +33,7 @@ public class ManageModoC2 : MonoBehaviour
         UpdateTentativas(); //Atualiza numero de tentativas
         somAcerto = GetComponent<AudioSource>(); //Pega o AudioSource do GameObject gameManager
         ultimoRecorde = PlayerPrefs.GetInt(GameStrings.recordeModoC2, 0); // Seta o valor do ultimo recorde de menos tentativas no jogo.
-        //PlayerPrefs.SetString("UltimoModoJogado", "ModoNormal"); //Salva o ultimo modo jogado no PlayerPrefs
-        GameObject.Find("ultimoRecorde").GetComponent<Text>().text = "Recorde: " + ultimoRecorde;
+        GameObject.Find("ultimoRecorde").GetComponent<Text>().text = "Recorde: " + ultimoRecorde; //Pega ultimo recorde do modo
     }
 
     // Update is called once per frame
@@ -48,17 +47,16 @@ public class ManageModoC2 : MonoBehaviour
             print(timer);
             if (timer > 1) //Caso tempo seja maior que 1, verifica se houve acerto ou erro no jogo
             {
-                timerPausado = true;
                 timerAcionado = false;
                 //carta.name
                 //if (carta1.tag == carta2.tag)
                 
-                if (carta1.name.Substring(2, carta1.name.Length - 2) == carta2.name.Substring(2, carta2.name.Length - 2))
+                if (carta1.name.Substring(2, carta1.name.Length - 2) == carta2.name.Substring(2, carta2.name.Length - 2)) //Verifica se as cartas são as mesmas para destrui-las, e caso não sejam, esconde as cartas.
                 {
                     Destroy(carta1);
                     Destroy(carta2);
-                    numAcertos++;
-                    somAcerto.Play();
+                    numAcertos++; //Aumenta numero de acertos.
+                    somAcerto.Play(); //Toca o som de acerto quando duas cartas são identicas.
                 }
                 else
                 {
@@ -81,7 +79,7 @@ public class ManageModoC2 : MonoBehaviour
         timer = 0;
     }
 
-    void MostraCartas()
+    void MostraCartas() //Método responsavel por gerar as cartas, com aleatoriedade na posição das cartas no baralho.
     {
         int[] lista = CriaArrayEmbaralhado(); //Pega array embaralhado de 0 a 3 para a primeira linha lado esquerdo
         int[] lista2 = CriaArrayEmbaralhado(); //Pega array embaralhado de 0 a 3 para a segunda linha lado esquerdo
@@ -110,7 +108,7 @@ public class ManageModoC2 : MonoBehaviour
         string letraCarta = "";
         string nipeCarta = "";
 
-        switch (valor)
+        switch (valor) //Verifica qual a letra e o nipe da carta de acordo com seu valor recebido.
         {
             case 0:
                 letraCarta = "ace";
@@ -178,10 +176,10 @@ public class ManageModoC2 : MonoBehaviour
                 break;
         }
         
-        GameObject centroDaTela = GameObject.Find("centroDaTela");
-        float escalaCartaOriginal = carta.transform.localScale.x;
-        float fatorEscalaX = (650 * escalaCartaOriginal) / 110.0f;
-        float fatorEscalaY = (945 * escalaCartaOriginal) / 110.0f;
+        GameObject centroDaTela = GameObject.Find("centroDaTela"); //Encontra o centro da tela para posicionamento da carta.
+        float escalaCartaOriginal = carta.transform.localScale.x; //Pega a escala da carta.
+        float fatorEscalaX = (650 * escalaCartaOriginal) / 110.0f; //Calcula fator escala em x para posicionamento de carta.
+        float fatorEscalaY = (945 * escalaCartaOriginal) / 110.0f; //Calcula fator escala em y para posicionamento de carta.
         Vector3 novaPosicao = new Vector3(centroDaTela.transform.position.x + ((rank - 4 / 2) * fatorEscalaX) + (lado * 12) - 5, centroDaTela.transform.position.y + ((linha - 2 / 2) * fatorEscalaY) - 1, centroDaTela.transform.position.z); //Calcula posição da nova carta.
 
         GameObject novaCarta = (GameObject)(Instantiate(carta, novaPosicao, Quaternion.identity)); //Instanica nova carta na posição calculada, para formação do baralho.
@@ -214,7 +212,7 @@ public class ManageModoC2 : MonoBehaviour
         return array;
     }
 
-    public void CartaSelecionada(GameObject carta)
+    public void CartaSelecionada(GameObject carta) //Chamada pelo Tile carta, notifica que uma carta especifica foi chamada, e caso a regra esteja valida, revela a carta.
     {
         if (!primeiraCartaSelecionada)
         {
@@ -238,37 +236,36 @@ public class ManageModoC2 : MonoBehaviour
         }
     }
 
-    public void VerificaCartas() //Dispara o timer
+    public void VerificaCartas() //Dispara o timer para verificar as cartas e atualiza numero de tentativas na tela.
     {
         DisparaTimer();
         numTentativas++;
         UpdateTentativas();
     }
 
-    public void DisparaTimer()
+    public void DisparaTimer() //Aciona o timer.
     {
-        timerPausado = false;
         timerAcionado = true;
     }
 
-    void UpdateTentativas()
+    void UpdateTentativas() //Atualiza numero de tentativas na tela.
     {
         GameObject.Find("numTentativas").GetComponent<Text>().text = "Tentativas: " + numTentativas + " / " + numMaximoTentativas;
     }
 
-    void VerificaVitoriaEDerrota()
+    void VerificaVitoriaEDerrota() //Verifica se, pela regra do jogo, o jogador venceu ou perdeu até o momento. Caso não esteja em nenhuma das situações, não faz nada.
     {
         if (numAcertos >= 13)
         {  
             if ((numTentativas < ultimoRecorde) ^ (ultimoRecorde == 0)) //Caso o numero de tentativas seja um novo recorde, salva esse novo recorde no PlayerPrefs.
             {
-                PlayerPrefs.SetInt(GameStrings.recordeModoC2, numTentativas);
+                PlayerPrefs.SetInt(GameStrings.recordeModoC2, numTentativas); //Configura novo recorde no modo de jogo.
             }
-            SceneManager.LoadScene(GameStrings.telaVitoria);
+            SceneManager.LoadScene(GameStrings.telaVitoria); //Chama tela de vitória
         }
         else if (numTentativas >= numMaximoTentativas)
         {
-            SceneManager.LoadScene(GameStrings.telaDerrota);
+            SceneManager.LoadScene(GameStrings.telaDerrota); //Chama tela de derrota
         }
     }
 }

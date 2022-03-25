@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class ManageModoC1 : MonoBehaviour
 {
     public GameObject carta; //Carta a ser descartada;
-    public int numMaximoTentativas = 60;
+    public int numMaximoTentativas = 60; //Define o valor maximo de tentativas do jogo.
 
     private GameObject carta1, carta2; //Armazena cartas reveladas;
     private bool primeiraCartaSelecionada, segundaCartaSelecionada; //Indicadores para cada carta escolhida em uma linha.
@@ -39,7 +39,7 @@ public class ManageModoC1 : MonoBehaviour
         somAcerto = GetComponent<AudioSource>(); //Pega o AudioSource do GameObject gameManager
         ultimoRecorde = PlayerPrefs.GetInt(GameStrings.recordeModoC1, 0); // Seta o valor do ultimo recorde de menos tentativas no jogo.
 
-        GameObject.Find("ultimoRecorde").GetComponent<Text>().text = "Recorde: " + ultimoRecorde;
+        GameObject.Find("ultimoRecorde").GetComponent<Text>().text = "Recorde: " + ultimoRecorde; //Recupera ultimo recorde do modo.
     }
 
     // Update is called once per frame
@@ -63,10 +63,9 @@ public class ManageModoC1 : MonoBehaviour
                 }
                 else
                 {
-                    carta1.GetComponent<Tile>().EscondeCarta();
-                    carta2.GetComponent<Tile>().EscondeCarta();
+                    carta1.GetComponent<Tile>().EscondeCarta(); //Esconde as cartas caso não tenha acertado.
+                    carta2.GetComponent<Tile>().EscondeCarta(); //Esconde as cartas caso não tenha acertado.
                 }
-
                 LimpaCampos();
             }
         }
@@ -98,10 +97,10 @@ public class ManageModoC1 : MonoBehaviour
     //Método responsável por instanciar a carta na posição correta.
     void AdicionaCarta(int linha, int rank, int valor, string nipe, string backColor)
     {
-        GameObject centroDaTela = GameObject.Find("centroDaTela");
+        GameObject centroDaTela = GameObject.Find("centroDaTela"); //Encontra centro da tela.
         float escalaCartaOriginal = carta.transform.localScale.x;
-        float fatorEscalaX = (650 * escalaCartaOriginal) / 110.0f;
-        float fatorEscalaY = (945 * escalaCartaOriginal) / 110.0f;
+        float fatorEscalaX = (650 * escalaCartaOriginal) / 110.0f; //Calcula o fator escala em x, para posicionamento da carta.
+        float fatorEscalaY = (945 * escalaCartaOriginal) / 110.0f; //Calcula o fator escala em y, para posicionamento da carta.
 
         Vector3 novaPosicao = new Vector3(centroDaTela.transform.position.x + ((rank - 13 / 2) * fatorEscalaX), centroDaTela.transform.position.y + ((linha - 2 / 2) * fatorEscalaY), centroDaTela.transform.position.z); //Calcula posição da nova carta.
         GameObject novaCarta = (GameObject)(Instantiate(carta, novaPosicao, Quaternion.identity)); //Instanica nova carta na posição calculada, para formação do baralho.
@@ -111,7 +110,7 @@ public class ManageModoC1 : MonoBehaviour
         string nomeCarta = "";
         string numeroCarta = "";
 
-        if (valor == 0)
+        if (valor == 0) //Configura numeroCarta de acordo com o valor passado.
         {
             numeroCarta = "ace";
         }
@@ -181,9 +180,9 @@ public class ManageModoC1 : MonoBehaviour
 
     public void VerificaCartas() //Aumenta o número de tentativas e ativa o timer para verificar as cartas.
     {
-        DisparaTimer();
-        numTentativas++;
-        UpdateTentativas();
+        DisparaTimer(); //Dispara timer.
+        numTentativas++; //Aumenta numero de tentativas
+        UpdateTentativas(); //Atualiza numero de tentativas na tela.
     }
 
     public void DisparaTimer() //Aciona o Timer quando as duas cartas forem escolhidas, para o usuario poder ver o que escolheu e tentar decorar.
@@ -207,11 +206,11 @@ public class ManageModoC1 : MonoBehaviour
             {
                 PlayerPrefs.SetInt(GameStrings.recordeModoC1, numTentativas);
             }
-            SceneManager.LoadScene(GameStrings.telaVitoria);
+            SceneManager.LoadScene(GameStrings.telaVitoria); //Chama tela de vitoria.
         }
         else if (numTentativas >= numMaximoTentativas) //Caso ultrapasse o limite de tentativas, vai para tela de derrota.
         {
-            SceneManager.LoadScene(GameStrings.telaDerrota);
+            SceneManager.LoadScene(GameStrings.telaDerrota); //Chama tela de derrota
         }
     }
 }

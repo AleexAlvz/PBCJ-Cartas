@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Script gerenciador das cartas, responsável por gera-las e garantir o funcionamento do game.
+/// Script gerenciador das cartas, responsável por gera-las e garantir o funcionamento do game do modo normal.
 /// </summary>
 public class ManageCartas : MonoBehaviour
 {
@@ -54,7 +54,7 @@ public class ManageCartas : MonoBehaviour
             if (timer > 1) //Caso tempo seja maior que 1, verifica se houve acerto ou erro no jogo
             {
                 timerAcionado = false;
-                if (carta1.tag == carta2.tag)
+                if (carta1.tag == carta2.tag) //Verifica se as cartas possuem mesmo valor no jogo da memória, para destrui-las.
                 {
                     Destroy(carta1); //Caso acerte as cartas, destrói os gameObjects das duas cartas.
                     Destroy(carta2);
@@ -98,7 +98,7 @@ public class ManageCartas : MonoBehaviour
     //Método responsável por instanciar a carta na posição correta.
     void AdicionaCarta(int linha, int rank, int valor, string nipe, string backColor)
     {
-        GameObject centroDaTela = GameObject.Find("centroDaTela");
+        GameObject centroDaTela = GameObject.Find("centroDaTela"); //Encontra o gameObject centro da tela
         float escalaCartaOriginal = carta.transform.localScale.x;
         float fatorEscalaX = (650 * escalaCartaOriginal) / 110.0f;
         float fatorEscalaY = (945 * escalaCartaOriginal) / 110.0f;
@@ -111,7 +111,7 @@ public class ManageCartas : MonoBehaviour
         string nomeCarta = "";
         string numeroCarta = "";
 
-        if (valor == 0)
+        if (valor == 0) //Configura a variavel numeroCarta de acordo com seu valor.
         {
             numeroCarta = "ace";
         }
@@ -155,6 +155,7 @@ public class ManageCartas : MonoBehaviour
         return array;
     }
 
+    //Chamada pelo Tile, avisando que uma carta especifica foi selecionada. Verifica se a carta é valdia para ser revelada.
     public void CartaSelecionada(GameObject carta)
     {
         if (!primeiraCartaSelecionada) //Verifica se foi a primeira carta selecionada
@@ -182,8 +183,8 @@ public class ManageCartas : MonoBehaviour
     public void VerificaCartas() //Aumenta o número de tentativas e ativa o timer para verificar as cartas.
     {
         DisparaTimer();
-        numTentativas++;
-        UpdateTentativas();
+        numTentativas++; //Aumenta n onumero de tentativas.
+        UpdateTentativas(); //Atualiza na tela as tentativas.
     }
 
     public void DisparaTimer() //Aciona o Timer quando as duas cartas forem escolhidas, para o usuario poder ver o que escolheu e tentar decorar.
@@ -207,11 +208,11 @@ public class ManageCartas : MonoBehaviour
             {
                 PlayerPrefs.SetInt(GameStrings.recordeModoNormal, numTentativas);
             }
-            SceneManager.LoadScene(GameStrings.telaVitoria);
+            SceneManager.LoadScene(GameStrings.telaVitoria); //Leva para tela de vitoria
         }
         else if (numTentativas >= numMaximoTentativas) //Caso ultrapasse o limite de tentativas, vai para tela de derrota.
         {
-            SceneManager.LoadScene(GameStrings.telaDerrota);
+            SceneManager.LoadScene(GameStrings.telaDerrota); //Leva para tela de derrota
         }
     }
 }

@@ -30,14 +30,14 @@ public class Tile : MonoBehaviour
         print("Você clicou em uma carta!");        
 
         string ultimoModoJogado = PlayerPrefs.GetString(GameStrings.ultimoModojogado);
-        if (ultimoModoJogado == GameStrings.modoNormal) GameObject.Find("gameManager").GetComponent<ManageCartas>().CartaSelecionada(gameObject);
+        if (ultimoModoJogado == GameStrings.modoNormal) GameObject.Find("gameManager").GetComponent<ManageCartas>().CartaSelecionada(gameObject); //Verifica a qual jogo a carta pertence, e notifica do click.
         else if (ultimoModoJogado == GameStrings.modoC1) GameObject.Find("gameManager").GetComponent<ManageModoC1>().CartaSelecionada(gameObject);
         else if (ultimoModoJogado == GameStrings.modoC2) GameObject.Find("gameManager").GetComponent<ManageModoC2>().CartaSelecionada(gameObject);
     }
 
-    public void SetBackColor(string backColorString)
+    public void SetBackColor(string backColorString) //Configura a cor das costas da carta.
     {
-        backColor = backColorString;
+        backColor = backColorString; 
     }
 
     public void EscondeCarta() //Vira a carta, mostrando a parte de trás
@@ -55,11 +55,10 @@ public class Tile : MonoBehaviour
 
     public void RevelaCarta() //Vira a carta, mostrando a parte da frente
     {
-        GetComponent<SpriteRenderer>().sprite = cartaOriginal; //configura o sprite do Tile
-        //cartaRevelada = true; //indicador de cartaRevelada não está sendo usado
+        GetComponent<SpriteRenderer>().sprite = cartaOriginal; //configura o sprite do Tile       
     }
 
-    public void SetCartaOriginal(Sprite sprite) //configura o sprite representate da carta instanciada
+    public void SetCartaOriginal(Sprite sprite) //configura o sprite representante da carta instanciada
     {
         cartaOriginal = sprite;
     }
