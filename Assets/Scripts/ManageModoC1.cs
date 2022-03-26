@@ -38,6 +38,7 @@ public class ManageModoC1 : MonoBehaviour
         UpdateTentativas(); //Atualiza numero de tentativas
         somAcerto = GetComponent<AudioSource>(); //Pega o AudioSource do GameObject gameManager
         ultimoRecorde = PlayerPrefs.GetInt(GameStrings.recordeModoC1, 0); // Seta o valor do ultimo recorde de menos tentativas no jogo.
+        PlayerPrefs.SetString(GameStrings.ultimoModojogado, GameStrings.modoC1); //Salva o ultimo modo jogado no PlayerPrefs
 
         GameObject.Find("ultimoRecorde").GetComponent<Text>().text = "Recorde: " + ultimoRecorde; //Recupera ultimo recorde do modo.
     }

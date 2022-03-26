@@ -10,12 +10,10 @@ using UnityEngine.SceneManagement;
 public class ManageModoC2 : MonoBehaviour
 {
     public GameObject carta; //Carta a ser descartada;
-    public int numMaximoTentativas = 60;
+    public int numMaximoTentativas = 60; //Numero maximo de tentativas antes do jogador ser derrotado.
     private bool primeiraCartaSelecionada, segundaCartaSelecionada; //Indicadores para cada carta escolhida em uma linha.
     private GameObject carta1, carta2 ; //Armazena cartas reveladas;
-    private string ladoCarta1, ladoCarta2;
-    public string linha1Nipe, linha2Nipe, linha3Nipe, linha4Nipe; //Escolhe o nipe das cartas pela linha
-    public string linha1BackColor, linha2BackColor; //Escolhe a backColor das cartas
+    private string ladoCarta1, ladoCarta2; //Armazena o lado das cartas escolhidas, na ordem
 
     bool timerAcionado; //Boolean para o timer
     float timer; //Variavel que representa o timer quando duas cartas são escolhidas.
@@ -34,6 +32,7 @@ public class ManageModoC2 : MonoBehaviour
         somAcerto = GetComponent<AudioSource>(); //Pega o AudioSource do GameObject gameManager
         ultimoRecorde = PlayerPrefs.GetInt(GameStrings.recordeModoC2, 0); // Seta o valor do ultimo recorde de menos tentativas no jogo.
         GameObject.Find("ultimoRecorde").GetComponent<Text>().text = "Recorde: " + ultimoRecorde; //Pega ultimo recorde do modo
+        PlayerPrefs.SetString(GameStrings.ultimoModojogado, GameStrings.modoC2); //Salva o ultimo modo jogado no PlayerPrefs
     }
 
     // Update is called once per frame
@@ -51,7 +50,7 @@ public class ManageModoC2 : MonoBehaviour
                 //carta.name
                 //if (carta1.tag == carta2.tag)
                 
-                if (carta1.name.Substring(2, carta1.name.Length - 2) == carta2.name.Substring(2, carta2.name.Length - 2)) //Verifica se as cartas são as mesmas para destrui-las, e caso não sejam, esconde as cartas.
+                if (carta1.name.Substring(3, carta1.name.Length - 3) == carta2.name.Substring(3, carta2.name.Length - 3)) //Verifica se as cartas são as mesmas para destrui-las, e caso não sejam, esconde as cartas.
                 {
                     Destroy(carta1);
                     Destroy(carta2);
@@ -88,8 +87,8 @@ public class ManageModoC2 : MonoBehaviour
         int rank = 0;
         for (int i = 0; i < 16; i++) //Algoritmo que adiciona as cartas de acordo com a posição, mudando a coluna e a linha da carta.
         {
-            AdicionaCarta(0, linha, rank, lista[i], linha1BackColor);
-            AdicionaCarta(1, linha, rank, lista2[i], linha2BackColor);
+            AdicionaCarta(GameStrings.esquerda, linha, rank, lista[i], GameStrings.blueColor);
+            AdicionaCarta(GameStrings.direita, linha, rank, lista2[i], GameStrings.redColor);
 
             if (rank == 3)
             {
@@ -103,7 +102,7 @@ public class ManageModoC2 : MonoBehaviour
     }
 
     //Método responsável por instanciar a carta na posição correta.
-    void AdicionaCarta(int lado,int linha, int rank, int valor, string backColor)
+    void AdicionaCarta(string lado,int linha, int rank, int valor, string backColor)
     {
         string letraCarta = "";
         string nipeCarta = "";
@@ -180,19 +179,26 @@ public class ManageModoC2 : MonoBehaviour
         float escalaCartaOriginal = carta.transform.localScale.x; //Pega a escala da carta.
         float fatorEscalaX = (650 * escalaCartaOriginal) / 110.0f; //Calcula fator escala em x para posicionamento de carta.
         float fatorEscalaY = (945 * escalaCartaOriginal) / 110.0f; //Calcula fator escala em y para posicionamento de carta.
-        Vector3 novaPosicao = new Vector3(centroDaTela.transform.position.x + ((rank - 4 / 2) * fatorEscalaX) + (lado * 12) - 5, centroDaTela.transform.position.y + ((linha - 2 / 2) * fatorEscalaY) - 1, centroDaTela.transform.position.z); //Calcula posição da nova carta.
+        int valorLado;
+        if (lado == GameStrings.esquerda)
+        {
+            valorLado = -1;
+        } else
+        {
+            valorLado = 1;
+        }
+        Vector3 novaPosicao = new Vector3(valorLado*(centroDaTela.transform.position.x + ((rank - 2) * fatorEscalaX) + 5), centroDaTela.transform.position.y + ((linha - 2 / 2) * fatorEscalaY) - 1, centroDaTela.transform.position.z); //Calcula posição da nova carta. O lado mantém ou inverte o sinal do calculo da coordenada em x.
 
         GameObject novaCarta = (GameObject)(Instantiate(carta, novaPosicao, Quaternion.identity)); //Instanica nova carta na posição calculada, para formação do baralho.
 
-        novaCarta.name = "" + lado + "_" + valor + "-" + nipeCarta; //configra nome da nova carta.
+        novaCarta.name = "" + lado + "_" + letraCarta + "-" + nipeCarta; //configura nome da nova carta.
 
         string nomeCarta = "";
-        
-
         nomeCarta = letraCarta + "_of_" + nipeCarta; // Nome da carta de acordo com o seu numero e o nipe.
-        Sprite s1 = (Sprite)Resources.Load<Sprite>("Images/Cartas/" + nomeCarta); //Busca a carta pelo nome nos resources, no path "Cartas/"
-        print("S1: " + s1);
-        Tile tile = GameObject.Find("" + lado + "_" + valor + "-" + nipeCarta).GetComponent<Tile>(); //Encontra tile com nome especifico
+        print(nomeCarta);
+
+        Sprite s1 = (Sprite)Resources.Load<Sprite>("Images/Cartas/" + nomeCarta); //Busca a carta pelo nome nos resources, no path "Images/Cartas/"
+        Tile tile = GameObject.Find("" + lado + "_" + letraCarta + "-" + nipeCarta).GetComponent<Tile>(); //Encontra tile com nome especifico
         tile.SetCartaOriginal(s1); //Configura a imagem da carta
         tile.SetBackColor(backColor); //Configura backColor da carta
     }
@@ -216,7 +222,7 @@ public class ManageModoC2 : MonoBehaviour
     {
         if (!primeiraCartaSelecionada)
         {
-            string lado = carta.name.Substring(0, 1); // Armazena a lado da carta selecionada.
+            string lado = carta.name.Substring(0, 2); // Armazena a lado da carta selecionada.
             ladoCarta1 = lado;
             primeiraCartaSelecionada = true; // Indica que a carta foi selecionada
             carta1 = carta; // define a carta1 como a carta clicada.
@@ -224,7 +230,7 @@ public class ManageModoC2 : MonoBehaviour
         }
         else if (primeiraCartaSelecionada && !segundaCartaSelecionada)
         {
-            string Lado2 = carta.name.Substring(0, 1); // Armazena a linha da carta selecionada.
+            string Lado2 = carta.name.Substring(0, 2); // Armazena o lado da carta selecionada.
             if (ladoCarta1 != Lado2) // Verifica se a segunda carta está no outro baralho.
             {
                 ladoCarta2 = Lado2;
@@ -255,7 +261,7 @@ public class ManageModoC2 : MonoBehaviour
 
     void VerificaVitoriaEDerrota() //Verifica se, pela regra do jogo, o jogador venceu ou perdeu até o momento. Caso não esteja em nenhuma das situações, não faz nada.
     {
-        if (numAcertos >= 13)
+        if (numAcertos >= 16)
         {  
             if ((numTentativas < ultimoRecorde) ^ (ultimoRecorde == 0)) //Caso o numero de tentativas seja um novo recorde, salva esse novo recorde no PlayerPrefs.
             {

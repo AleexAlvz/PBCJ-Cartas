@@ -38,6 +38,7 @@ public class ManageCartas : MonoBehaviour
         UpdateTentativas(); //Atualiza numero de tentativas
         somAcerto = GetComponent<AudioSource>(); //Pega o AudioSource do GameObject gameManager
         ultimoRecorde = PlayerPrefs.GetInt(GameStrings.recordeModoNormal, 0); // Seta o valor do ultimo recorde de menos tentativas no jogo.
+        PlayerPrefs.SetString(GameStrings.ultimoModojogado, GameStrings.modoNormal); //Salva o ultimo modo jogado no PlayerPrefs
 
         GameObject.Find("ultimoRecorde").GetComponent<Text>().text = "Recorde: " + ultimoRecorde;
     }

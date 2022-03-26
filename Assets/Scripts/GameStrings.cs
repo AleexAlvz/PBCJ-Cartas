@@ -27,4 +27,7 @@ public static class GameStrings
 
     public const string redColor = "red"; //backColor da carta na cor vermelha
     public const string blueColor = "blue"; //backColor da carta na cor azul
+
+    public const string esquerda = "esq"; //String para direção esquerda
+    public const string direita = "dir"; //String para direção direita.
 }
