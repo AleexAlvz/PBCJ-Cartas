@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 public class TelaCreditos : MonoBehaviour
 {
 
-    float speed = 0.1f;
+    float speed = 0.6f;
     int time = 0;
 
     // Start is called before the first frame update
@@ -33,7 +33,7 @@ public class TelaCreditos : MonoBehaviour
     //Define o tempo de exibição dos créditos, para retornar ao inicio
     void VerificaTempoDeCreditos()
     {
-        if(time>=12000)
+        if(transform.position.y>=600.0f)
         {
             SceneManager.LoadScene(GameStrings.telaInicial);
         }

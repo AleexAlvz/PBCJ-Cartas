@@ -61,8 +61,8 @@
     <Compile Include="Assets\Scripts\ManageButtons.cs" />
     <Compile Include="Assets\Scripts\ManageModoC1.cs" />
     <Compile Include="Assets\Scripts\ManageModoC2.cs" />
-    <Compile Include="Assets\Scripts\GameStrings.cs" />
     <Compile Include="Assets\Scripts\TelaCreditos.cs" />
+    <Compile Include="Assets\Scripts\GameStrings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Sprites\mikulka-smile\mikulka-smile-license.txt" />
